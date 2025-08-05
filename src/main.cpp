@@ -1,18 +1,37 @@
 #include <Arduino.h>
 
+// constants
+const int trigPin = 9;
+const int echoPin = 10;
+
+// variables
+float duration, distance;
+
 // put function declarations here:
-int myFunction(int, int);
+void handleEcho();
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+    // initialize digital pin LED_BUILTIN as an output.
+    pinMode(trigPin, OUTPUT);
+    pinMode(echoPin, INPUT);
+    Serial.begin(9600);
 }
 
+// the loop function runs over and over again forever
 void loop() {
-  // put your main code here, to run repeatedly:
+    handleEcho();
 }
-
 // put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+void handleEcho() {
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
+
+    duration = pulseIn(echoPin, HIGH);
+    distance = (duration*0.0343)/2; // distance in cm
+    Serial.print("\nDistance: ");
+    Serial.print(distance);
+    delay(100);
 }
