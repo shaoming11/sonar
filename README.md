@@ -32,20 +32,12 @@ SONAR combines an Arduino-controlled servo-mounted ultrasonic sensor with real-t
 
 ## 📋 Pin Connections
 
-### Arduino Uno/Nano
+### Arduino Uno
 ```
 Servo Signal    → Pin 6 (PWM)
 Ultrasonic Trig → Pin 9
 Ultrasonic Echo → Pin 10
 Power (5V/GND)  → Respective power rails
-```
-
-### ESP32 (Alternative)
-```
-Servo Signal    → Pin 18
-Ultrasonic Trig → Pin 5
-Ultrasonic Echo → Pin 18
-Power (3.3V/GND) → Respective power rails
 ```
 
 ## 🚀 Installation
@@ -160,28 +152,6 @@ const int MAX_ANGLE = 180;       // End angle
 const unsigned long ECHO_TIMEOUT = 30000;  // Microseconds
 // Range validation: 2cm - 400cm for HC-SR04
 ```
-
-## 📈 Technical Specifications
-
-| Parameter | Value | Notes |
-|-----------|-------|-------|
-| **Detection Range** | 2-400cm | HC-SR04 sensor limits |
-| **Angular Resolution** | 1-5° | Configurable step size |
-| **Update Rate** | ~20Hz | Depends on sweep speed |
-| **Display Refresh** | 20Hz | 50ms intervals |
-| **Serial Baud Rate** | 9600 | Arduino ↔ Python |
-| **Power Requirements** | 5V/1A | Arduino + servo |
-
-## 🤝 Contributing
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
----
-- [ ] **ESP32 WiFi**: Wireless data transmission
 
 ---
 
