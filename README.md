@@ -23,7 +23,7 @@ SONAR combines an Arduino-controlled servo-mounted ultrasonic sensor with real-t
 
 | Component | Quantity | Purpose |
 |-----------|----------|---------|
-| Arduino Uno/Nano or ESP32 | 1 | Main controller |
+| Arduino Uno | 1 | Main controller |
 | HC-SR04 Ultrasonic Sensor | 1 | Distance measurement |
 | SG90 Servo Motor | 1 | Sensor rotation |
 | Jumper Wires | ~10 | Connections |
