@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 import math
+from matplotlib.animation import FuncAnimation
 
 ser = 5 # serial.Serial(port='/dev/cu.usbmodem1101', baudrate=9600, timeout=1)
 
@@ -52,51 +53,57 @@ def main():
         #     if packet != b'\xff':
         #         print(packet.decode('utf', errors='ignore'))
     
-# GRAPHING + ANIMATIONS
-xmin, xmax, ymin, ymax = -5, 5, -5, 5
-ticks_frequency = 1
 
-fig, ax = plt.subplots(figsize=(10,10))
-fig.patch.set_facecolor('#ffffff')
+# Set up the figure and axis
+fig, ax = plt.subplots(figsize=(10, 8))
+ax.set_xlim(-8, 8)
+ax.set_ylim(-2, 8)
+ax.set_aspect('equal')
+ax.grid(True, alpha=0.3)
 
-ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1), aspect='equal')
-ax.spines['bottom'].set_position('zero')
-ax.spines['left'].set_position('zero')
+# Draw Cartesian plane axes
+ax.axhline(y=0, color='black', linewidth=1.5)
+ax.axvline(x=0, color='black', linewidth=1.5)
 
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
+# Add axis labels
+ax.set_xlabel('X', fontsize=12)
+ax.set_ylabel('Y', fontsize=12)
+ax.set_title('Cartesian Plane with Semicircle and Rotating Line', fontsize=14)
 
-ax.set_xlabel('$x$', size=14, labelpad=-24, x=1.02)
-ax.set_ylabel('$y$', size=14, labelpad=21, y=1.02, rotation=0)
+# Draw semicircle (upper half only) with radius 5 centered at origin
+theta_semicircle = np.linspace(0, np.pi, 100)
+x_semicircle = 5 * np.cos(theta_semicircle)
+y_semicircle = 5 * np.sin(theta_semicircle)
+ax.plot(x_semicircle, y_semicircle, 'blue', linewidth=2, label='Semicircle (r=5)')
 
-plt.text(0.49, 0.49, r"$0$", ha='right', va='top', transform=ax.transAxes, horizontalalignment='center', fontsize=14)
+# Initialize the rotating line
+line, = ax.plot([], [], 'red', linewidth=3, label='Rotating Line')
+point, = ax.plot([], [], 'ro', markersize=8)
 
-x_ticks = np.arange(xmin, xmax+1, ticks_frequency)
-y_ticks = np.arange(ymin, ymax+1, ticks_frequency)
-ax.set_xticks(x_ticks[x_ticks != 0])
-ax.set_yticks(y_ticks[y_ticks != 0])
-ax.set_xticks(np.arange(xmin, xmax+1), minor=True)
-ax.set_yticks(np.arange(ymin, ymax+1), minor=True)
+# Add legend
+ax.legend()
 
-ax.grid(which='both', color='grey', linewidth=1, linestyle='-', alpha=0.2)
-
-def func(x):
-    return ((x - 1 ) ** 2) - 2
-
-def semicircle(x, r):
-    """
-    x2 + y = r2
-    r2-x2
+def animate(frame):
+    # Calculate angle for rotation (from -π to 0 for clockwise from left to right)
+    # We use 180 frames to complete the semicircle rotation
+    angle = np.pi - (frame * np.pi / 180)  # Start from π (left) to 0 (right)
     
-    """
-    l = []
-    for i in x:
-        l.append(math.sqrt(pow(r, 2) - pow(i, 2)))
-    return l # 
- 
-x = np.linspace(-5, 5, 100)
-y = semicircle(x, 5)
- 
-plt.plot(x, y, 'b', linewidth=2)
-print([x, semicircle(x, 5)])
+    # Calculate end point of the line (length 5)
+    x_end = 5 * np.cos(angle)
+    y_end = 5 * np.sin(angle)
+    
+    # Update line coordinates (from origin to end point)
+    line.set_data([0, x_end], [0, y_end])
+    
+    # Update point at the end of the line
+    point.set_data([x_end], [y_end])
+    
+    return line, point
+
+# Create animation
+# 181 frames to include both start and end positions
+anim = FuncAnimation(fig, animate, frames=181, interval=50, blit=True, repeat=True)
+
+# Show the plot
+plt.tight_layout()
 plt.show()
